@@ -32,9 +32,9 @@
         <h4>Hours</h4>
         <ul>
           <li>Mon – Sat</li>
-          <li>11:00 AM – 8:00 PM</li>
+          <li>11:00 AM – 9:00 PM</li>
           <li style="margin-top:8px">Sunday</li>
-          <li>11:00 AM – 6:00 PM</li>
+          <li>11:00 AM – 8:00 PM</li>
         </ul>
       </div>
     </div>

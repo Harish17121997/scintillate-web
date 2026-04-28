@@ -87,7 +87,7 @@
           <div class="loc-blocks">
             <div class="lb"><span class="ll">Address</span><span class="lv">SHOP 4, SRNO 113/7, near Ganraj Chowk,<br>Veerbhadra Nagar, Baner, Pune 411045</span></div>
             <div class="lb"><span class="ll">Phone</span><span class="lv"><a href="tel:9766419199">+91 97664 19199</a></span></div>
-            <div class="lb"><span class="ll">Hours</span><span class="lv">Mon–Sat: 10 AM – 8 PM<br>Sunday: 10 AM – 6 PM</span></div>
+            <div class="lb"><span class="ll">Hours</span><span class="lv">Mon–Sat: 11 AM – 9 PM<br>Sunday: 11 AM – 8 PM</span></div>
           </div>
           <!--  Uses injected openBooking directly -->
           <button class="btn-primary" style="margin-top:28px" @click="openBooking">Book Appointment</button>
