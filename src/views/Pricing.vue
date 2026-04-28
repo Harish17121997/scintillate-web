@@ -293,7 +293,7 @@
               <span class="pkv save">₹{{ (pkg.get - pkg.pay).toLocaleString() }}</span>
             </div>
             <div class="pkg-validity"><span class="pkl">Valid For</span><span class="validity-tag">{{ pkg.validity }}</span></div>
-            <button class="btn-primary pkg-btn" @click="$parent.$parent.openBooking?.()">Buy Package</button>
+            <button class="btn-primary pkg-btn" @click="openBooking">Buy Package</button>
           </div>
         </div>
       </div>
@@ -304,13 +304,15 @@
     <div class="book-cta">
       <h2>Ready to Look <em>Stunning?</em></h2>
       <p>Book your appointment online or walk into our salon in Baner, Pune.</p>
-      <button class="btn-primary" @click="$parent.openBooking?.()">Book Your Appointment</button>
+      <button class="btn-primary" @click="openBooking">Book Your Appointment</button>
     </div>
   </div>
 </template>
 
 <script setup>
 import { ref } from 'vue'
+import { useBooking } from '../composables/useBooking.js'
+const { openBooking } = useBooking()
 
 const activeTab = ref('all')
 const tabs = [

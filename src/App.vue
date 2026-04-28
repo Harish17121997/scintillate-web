@@ -11,9 +11,7 @@
       </ul>
       <button class="nav-cta" @click="openBooking">Book Appointment</button>
       <button class="hamburger" @click="mobileOpen = !mobileOpen" aria-label="Menu">
-        <span :class="{ open: mobileOpen }"></span>
-        <span :class="{ open: mobileOpen }"></span>
-        <span :class="{ open: mobileOpen }"></span>
+        <span></span><span></span><span></span>
       </button>
     </nav>
 
@@ -28,12 +26,12 @@
     <router-view />
 
     <!-- BOOKING POPUP -->
-    <div class="popup-overlay" :class="{ active: bookingOpen }" @click.self="bookingOpen=false">
+    <div class="popup-overlay" :class="{ active: bookingOpen }" @click.self="closeBooking">
       <div class="popup">
         <div class="popup-header">
           <h2>Book Your Appointment</h2>
           <p>We'll confirm within 30 minutes</p>
-          <button class="popup-close" @click="bookingOpen=false">×</button>
+          <button class="popup-close" @click="closeBooking">×</button>
         </div>
         <div class="popup-body">
           <div class="form-row">
@@ -148,23 +146,23 @@
 import { ref, onMounted, onUnmounted, computed } from 'vue'
 import { useRouter } from 'vue-router'
 import AppFooter from './components/AppFooter.vue'
+import { createBooking } from './composables/useBooking.js'
 
 const router = useRouter()
 const scrolled = ref(false)
 const mobileOpen = ref(false)
-const bookingOpen = ref(false)
 
 const today = computed(() => new Date().toISOString().split('T')[0])
 const timeSlots = ['10:00 AM','10:30 AM','11:00 AM','11:30 AM','12:00 PM','12:30 PM','1:00 PM','1:30 PM','2:00 PM','2:30 PM','3:00 PM','3:30 PM','4:00 PM','4:30 PM','5:00 PM','5:30 PM','6:00 PM','6:30 PM','7:00 PM']
 
 const form = ref({ name: '', phone: '', email: '', service: '', date: '', time: '', gender: '', notes: '' })
 
+// Creates booking state AND provides it to all child components via inject
+const { bookingOpen, openBooking, closeBooking } = createBooking()
+
 const onScroll = () => { scrolled.value = window.scrollY > 40 }
 onMounted(() => window.addEventListener('scroll', onScroll))
 onUnmounted(() => window.removeEventListener('scroll', onScroll))
-
-const openBooking = () => { bookingOpen.value = true; document.body.style.overflow = 'hidden' }
-watch(bookingOpen, v => { if (!v) document.body.style.overflow = '' })
 
 const goLocation = () => {
   if (router.currentRoute.value.path !== '/') router.push('/')
@@ -195,11 +193,6 @@ const sendEmail = () => {
 }
 </script>
 
-<script>
-import { watch } from 'vue'
-export default { name: 'App' }
-</script>
-
 <style>
 :root {
   --cream: #FAF7F2;
@@ -220,7 +213,6 @@ export default { name: 'App' }
 html { scroll-behavior: smooth; }
 body { font-family: 'DM Sans', sans-serif; background: var(--cream); color: var(--text-deep); overflow-x: hidden; }
 
-/* NAV */
 nav {
   position: fixed; top: 0; left: 0; right: 0; z-index: 1000;
   display: flex; align-items: center; justify-content: space-between;
@@ -243,7 +235,6 @@ nav.scrolled { box-shadow: 0 2px 24px rgba(139,106,62,0.1); }
 .mobile-menu.open { display: flex; }
 .mobile-menu a { color: var(--text-deep); text-decoration: none; font-size: 18px; letter-spacing: 0.04em; border-bottom: 1px solid var(--border); padding-bottom: 16px; cursor: pointer; }
 
-/* POPUP */
 .popup-overlay { display: none; position: fixed; inset: 0; background: rgba(61,51,40,0.6); z-index: 2000; align-items: center; justify-content: center; padding: 20px; }
 .popup-overlay.active { display: flex; }
 .popup { background: var(--cream); width: 100%; max-width: 560px; max-height: 92vh; overflow-y: auto; position: relative; animation: slideUp 0.35s ease; }
@@ -266,12 +257,10 @@ nav.scrolled { box-shadow: 0 2px 24px rgba(139,106,62,0.1); }
 .btn-email { background: var(--gold); color: var(--cream); border: none; padding: 14px 20px; font-size: 13px; font-weight: 500; font-family: 'DM Sans', sans-serif; cursor: pointer; flex: 1; transition: background 0.2s; }
 .btn-email:hover { background: var(--gold-dark); }
 
-/* FLOAT WA */
 .float-wa { position: fixed; bottom: 28px; right: 28px; z-index: 999; width: 56px; height: 56px; background: #25D366; border-radius: 50%; display: flex; align-items: center; justify-content: center; box-shadow: 0 4px 18px rgba(37,211,102,0.3); transition: transform 0.2s; text-decoration: none; }
 .float-wa:hover { transform: scale(1.1); }
 .float-wa svg { width: 28px; height: 28px; fill: white; }
 
-/* SHARED LAYOUT */
 .s-tag { font-size: 11px; letter-spacing: 0.2em; text-transform: uppercase; color: var(--gold); margin-bottom: 16px; display: flex; align-items: center; gap: 12px; }
 .s-tag::before { content: ''; width: 28px; height: 1px; background: var(--gold); }
 .s-heading { font-family: 'Cormorant Garamond', serif; font-size: clamp(34px, 4vw, 56px); font-weight: 300; line-height: 1.1; letter-spacing: -0.01em; color: var(--text-deep); margin-bottom: 16px; }
